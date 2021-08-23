@@ -2,14 +2,17 @@
 clear;clc;
 warning('off');
 
+% Define 'zivlab/visual_drift' repository path 
+repository_path = 'E:\downloads\visual_drift-main';
+addpath([repository_path,'\scripts']);
+
 % Define the path contining the neuropixels .mat files
-neuropixels_results_path = 'D:\daniel-master\AllenBrainObservatory\Neuropixels\results\visual_dynamics_DD6\';
+neuropixels_results_path = [repository_path,'\data\neuropixels\'];
 
 % Create a list of all the neuropixels .mat files to be loaded
 % each .mat file corresponds to a single neuropixels recorded mouse
-neuropixels_mouse_list = dir(neuropixels_results_path);
-neuropixels_mouse_list(ismember({neuropixels_mouse_list.name}, {'.', '..'})) = [];
-neuropixels_mouse_list = {neuropixels_mouse_list.name}; % should have 58 entries.
+neuropixels_mouse_list = dir([neuropixels_results_path,'*.mat']); % should have 58 entries.
+
 
 % Define the list of visual areas that will be loaded and analysed
 brain_areas = {'VISp','VISl','VISal','VISpm','VISrl','VISam','LGd','LP'};
@@ -154,14 +157,14 @@ clc;
 disp(['Loading Neuropixels data:'])
 disp('DONE!')
 
-clearvars -except neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
+clearvars -except repository_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
     neuropixels_running_speed neuropixels_pupil_size neuropixels_cell_count movie_repeats...
     neuropixels_population_vectors_tsne
 
 %% Load excitatory calcium imaging data
 for area = 1:6
     % Define the path contining the excitatory calcium imaging .mat files
-    results_path = ['E:\daniel_master\AllenBrainObservatory\calcium_imaging\results_files\excitatory4\',brain_areas{area},'\'];
+    results_path = [repository_path,'\data\calcium_excitatory\',brain_areas{area},'\'];
     
     % Create a list of all the excitatory calcium imaging .mat files to be loaded
     % each .mat file corresponds to a single calcium imaging recorded mouse
@@ -344,7 +347,7 @@ clc;
 disp(['Loading calcium imaging excitatory data:'])
 disp('DONE!')
 
-clearvars -except neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
+clearvars -except repository_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
     neuropixels_running_speed neuropixels_pupil_size neuropixels_cell_count movie_repeats...
     calcium_excitatory_population_vectors calcium_excitatory_drifting_gratings...
     calcium_excitatory_spont_population_vectors calcium_excitatory_cell_count...
@@ -354,9 +357,8 @@ clearvars -except neuropixels_population_vectors neuropixels_drifting_gratings b
 
 
 %% Load inhibitory calcium imaging data
-
 for area = [1,2,4]
-    results_path = ['E:\daniel_master\AllenBrainObservatory\calcium_imaging\results_files\inhibitory\',brain_areas{area},'\'];
+    results_path = [repository_path,'\data\calcium_inhibitory\',brain_areas{area},'\'];
     mat_list = dir([results_path,'*.mat']);
     mat_list = {mat_list.name};
     calcium_population_vectors_across_mice = {};
@@ -444,7 +446,7 @@ clc;
 disp(['Loading calcium imaging inhibitory data:'])
 disp('DONE!')
 
-clearvars -except neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
+clearvars -except repository_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
     neuropixels_running_speed neuropixels_pupil_size neuropixels_cell_count movie_repeats...
     calcium_excitatory_population_vectors calcium_excitatory_drifting_gratings...
     calcium_excitatory_spont_population_vectors calcium_excitatory_cell_count...
@@ -454,7 +456,7 @@ clearvars -except neuropixels_population_vectors neuropixels_drifting_gratings b
     calcium_inhibitory_cre_line calcium_excitatory_sorted_mouse_age...
     neuropixels_population_vectors_tsne
 
-brain_areas = {'V1','LM','AL','PM','RL','AM','dLGN','LP','CA1','CA2','CA3','DG'};
+brain_areas = {'V1','LM','AL','PM','RL','AM','dLGN','LP'};
 
 %% Define color schemes and load colormaps
 colors = [0 0.7 0.8 ;0 0.7 0.6; 0.9 0.8 0.2; 0.9 0.6 0.2; 0.9 0.5 0.7; 1 0.3 0.4;...
@@ -462,12 +464,10 @@ colors = [0 0.7 0.8 ;0 0.7 0.6; 0.9 0.8 0.2; 0.9 0.6 0.2; 0.9 0.5 0.7; 1 0.3 0.4
 colors2 = [0 0.5 0.6 ;0 0.5 0.4; 0.7 0.6 0; 0.7 0.4 0; 0.7 0.3 0.5; 0.8 0.1 0.2;...
     0.5 0.5 0.5; 0.4 0.4 0.4; 0.3 0.3 0.3; 0.2 0.2 0.2; 0.1 0.1 0.1; 0.0 0.0 0.0];
 
-load('D:\daniel-master\AllenBrainObservatory\Neuropixels\rank_colormap.mat')
-load('D:\daniel-master\AllenBrainObservatory\Neuropixels\stat_colormap.mat')
-load('D:\daniel-master\AllenBrainObservatory\Advanced\analysis\newmap3.mat')
-load('D:\daniel-master\AllenBrainObservatory\Neuropixels\magma_colormap.mat')
-load('D:\daniel-master\AllenBrainObservatory\Neuropixels\sig_colormap.mat')
-load('D:\daniel-master\AllenBrainObservatory\Neuropixels\new_jet_colormap.mat')
+load([repository_path,'\misc\newmap3.mat'])
+load([repository_path,'\misc\magma_colormap.mat'])
+load([repository_path,'\misc\sig_colormap.mat'])
+load([repository_path,'\misc\new_jet_colormap.mat'])
 
 %% Figure 1B - calcium imaging excitatory Cre lines cell counts
 % creates a boxplot visualizing the distribution of the average number of cells
@@ -599,8 +599,7 @@ for unit = 1:3 % loop over units
     imagesc(norm_current_unit)
     hold on
     title(['Unit #',num2str(unit)])
-    plot(xlim, [30 30]+0.5,...
-        'linewidth',2,'color','w')
+    plot(xlim, [30 30]+0.5,'--','linewidth',2,'color','w')
     
     if unit == 1
         ylabel('Movie repeat')
@@ -906,7 +905,7 @@ for area = 1:6 % loop over areas
     
     mean_across_mice = mean(current_area,'omitnan'); % calculate mean pv corr across mice
     std_across_mice = std(current_area,'omitnan'); % calculate standard deviation across mice
-    ste_norm_vals = std_across_mice./sqrt(size(current_area,1)); % calculate standard error across mice
+    ste_across_mice = std_across_mice./sqrt(size(current_area,1)); % calculate standard error across mice
     
     hold on
     x = [1:length(mean_across_mice)]';
