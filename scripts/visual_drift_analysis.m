@@ -12,7 +12,7 @@ neuropixels_results_path = [repository_path,'\data\neuropixels\'];
 % Create a list of all the neuropixels .mat files to be loaded
 % each .mat file corresponds to a single neuropixels recorded mouse
 neuropixels_mouse_list = dir([neuropixels_results_path,'*.mat']); % should have 58 entries.
-
+neuropixels_mouse_list = {neuropixels_mouse_list.name};
 
 % Define the list of visual areas that will be loaded and analysed
 brain_areas = {'VISp','VISl','VISal','VISpm','VISrl','VISam','LGd','LP'};
@@ -1144,7 +1144,7 @@ for area = 1:6 % loop over brain areas
             for repeat2 = 1:30 % loop over movie repeats
                 current_tuning_blockA = corr(current_mouse_blockA(:,:,repeat1)',current_mouse_blockA(:,:,repeat2)'); % correlation between tuning curves of corresponding units across pair of movie repeats in block A
                 current_mouse_tuning_corr(repeat1,repeat2,1) = median(diag(current_tuning_blockA),'omitnan'); % median tuning curve corr value across corresponding units
-                imagesc(current_tuning_blockA)
+               
                 current_tuning_blockB = corr(current_mouse_blockB(:,:,repeat1)',current_mouse_blockB(:,:,repeat2)'); % correlation between tuning curves of corresponding units across pair of movie repeats in block B
                 current_mouse_tuning_corr(repeat1,repeat2,2) = median(diag(current_tuning_blockB),'omitnan'); % median tuning curve corr value across corresponding units
             end
@@ -2274,8 +2274,6 @@ for area = 1:6
     text(0.6, 0.925,['p = ',num2str(round(corrected_pvalue(area),4))],'Units','normalized','color',[0 0 0])
 end
 
-[~,i] = sort(pvals','descend')
-pvals(i)
 
 %% Figure 4A - PV correlation across days grouped by layers and areas
 % PV correlation between the two halves of the same session (within session),
@@ -2650,7 +2648,7 @@ mouse = 9; % exmaple mouse #9
 
 % subset the neuronal activity of a single exmaple mouse (sst cre line)
 example_mouse = calcium_inhibitory_population_vectors{area}{mouse,nat_movie}*30;
-cell_list = [5,4,7];
+cell_list = [4,5,7];
 figure('units','normalized','position',[0.3 0.3 0.3 0.5])
 for current_cell = 1:length(cell_list)
     % example_cell - binned activity rate (calcium events) for example cell
