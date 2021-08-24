@@ -5,6 +5,6 @@ This repository includes analyses and processed data presented in Deitch et al.,
 Scripts are provided in the *scripts* directory. Data sets are provided in the *data* directory.
 
 To perform the analysis on the provided data sets, use the *visual_drift_analysis.m* script.
-Before running the script, change the *repository_path* variable to the *data* directory on your computer.
+Before running the script, change the pathway in *scripts_path* and *data_path* variables to the pathway of the corresponding *scripts* and *data* directories on your computer.
 
 ## References
