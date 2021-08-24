@@ -2,14 +2,15 @@
 clear;clc;
 warning('off');
 
-% Define 'zivlab/visual_drift' repository path 
-repository_path = 'E:\downloads\visual_drift-main';
-addpath([repository_path,'\scripts']); % add the scripts folder path into MATLAB paths
+% Define scripts and data paths
+data_path = 'E:\downloads\visual_drift-main\data';
+scripts_path = 'E:\downloads\visual_drift-main\scripts';
+addpath(scripts_path); % add the scripts folder path into MATLAB paths
 
 %% Load Neuropixels data
 
 % Define the path contining the neuropixels .mat files
-neuropixels_results_path = [repository_path,'\data\neuropixels\'];
+neuropixels_results_path = [data_path,'\neuropixels\'];
 
 % Create a list of all the neuropixels .mat files to be loaded
 % each .mat file corresponds to a single neuropixels recorded mouse
@@ -166,7 +167,7 @@ clearvars -except repository_path neuropixels_population_vectors neuropixels_dri
 %% Load excitatory calcium imaging data
 for area = 1:6
     % Define the path contining the excitatory calcium imaging .mat files
-    results_path = [repository_path,'\data\calcium_excitatory\',brain_areas{area},'\'];
+    results_path = [data_path,'\calcium_excitatory\',brain_areas{area},'\'];
     
     % Create a list of all the excitatory calcium imaging .mat files to be loaded
     % each .mat file corresponds to a single calcium imaging recorded mouse
@@ -374,7 +375,7 @@ clearvars -except repository_path neuropixels_population_vectors neuropixels_dri
 %% Load inhibitory calcium imaging data
 for area = [1,2,4]
     % Define the path contining the inhibitory calcium imaging .mat files
-    results_path = [repository_path,'\data\calcium_inhibitory\',brain_areas{area},'\'];
+    results_path = [data_path,'\calcium_inhibitory\',brain_areas{area},'\'];
     
      % Create a list of all the inhibitory calcium imaging .mat files to be loaded
     % each .mat file corresponds to a single calcium imaging recorded mouse
@@ -496,10 +497,10 @@ colors = [0 0.7 0.8 ;0 0.7 0.6; 0.9 0.8 0.2; 0.9 0.6 0.2; 0.9 0.5 0.7; 1 0.3 0.4
 colors2 = [0 0.5 0.6 ;0 0.5 0.4; 0.7 0.6 0; 0.7 0.4 0; 0.7 0.3 0.5; 0.8 0.1 0.2;...
     0.5 0.5 0.5; 0.4 0.4 0.4; 0.3 0.3 0.3; 0.2 0.2 0.2; 0.1 0.1 0.1; 0.0 0.0 0.0];
 
-load([repository_path,'\misc\newmap3.mat'])
-load([repository_path,'\misc\magma_colormap.mat'])
-load([repository_path,'\misc\sig_colormap.mat'])
-load([repository_path,'\misc\new_jet_colormap.mat'])
+load([data_path,'\colormaps\newmap3.mat'])
+load([data_path,'\colormaps\magma_colormap.mat'])
+load([data_path,'\colormaps\sig_colormap.mat'])
+load([data_path,'\colormaps\new_jet_colormap.mat'])
 
 %% Figure 1B - calcium imaging excitatory Cre lines cell counts
 % creates a boxplot visualizing the distribution of the average number of cells
@@ -4101,7 +4102,7 @@ suptitle(['Mouse #91 - area V1:'])
 
 
 % visualize the internal structure of the same example mouse
-load([repository_path,'\seeds\Figure6A.mat'],'state') % load seed for tSNE visualization
+load([data_path,'\seeds\Figure6A.mat'],'state') % load seed for tSNE visualization
 rng(state) % set seed
 
 % reshape the neuronal activity from 3D (475 cells x 90 time bins x 10 repeats) into 2D (475 cells x 900 time bins across repeats)
@@ -4145,7 +4146,7 @@ for area = 1:6 % loop over visual areas
     end
 end
 
-load([repository_path,'\seeds\Figure6C.mat'],'state') % load seed for tSNE visualization
+load([data_path,'\seeds\Figure6C.mat'],'state') % load seed for tSNE visualization
 rng(state) % set seed
 
 dim_reduce = tsne(structures_area_mats','Algorithm','exact','Distance','Cosine',...
@@ -4186,7 +4187,7 @@ colormap(newmap3)
 
 % Creation of two example pseudo-mice using the "Functional connectivity" group.
 % Since this procedure involves the random subsampling of mice and cells it requires the loading of saved seed
-load([repository_path,'\seeds\Figure6D.mat'],'state') % load seed
+load([data_path,'\seeds\Figure6D.mat'],'state') % load seed
 rng(state) % set seed
 
 nat_movie = 1; % natural movie 1
@@ -4335,7 +4336,7 @@ normalized_internal_structures_both_tech = [neuropixels_internal_structure_zscor
 area_labels_both_tech =[neuropixels_area_labels,calcium_area_labels+6]; % create a vector with labels for the internal structures of both pseudo-mice
 
 
-load([repository_path,'\seeds\Figure6E.mat'],'state') % load seed for tSNE visualization
+load([data_path,'\seeds\Figure6E.mat'],'state') % load seed for tSNE visualization
 rng(state) % set seed
 dim_reduce = tsne(normalized_internal_structures_both_tech','Algorithm','exact','Distance','correlation',...
     'NumDimensions',3,'NumPCAComponents',20,'Perplexity',40); % perform tSNE dim reduction on the internal structures of both pseudo-mice
@@ -4395,7 +4396,7 @@ for area = 1:6 % loop over areas
     end
 end
 % split the dataset into two independent group of mice
-load([repository_path,'\seeds\neuropixels_structure_ind.mat'],'pseudo_mouseA_ind','pseudo_mouseB_ind') % load pseudo-mice indices
+load([data_path,'\seeds\neuropixels_structure_ind.mat'],'pseudo_mouseA_ind','pseudo_mouseB_ind') % load pseudo-mice indices
 
 % for each visual area in each pseudo mouse, pool all units across mice
 % to create 12 pseudo areas (6 areas x 2 pseudo-mice)
@@ -4409,7 +4410,7 @@ end
 % perform tsne dim reduction for each pseudo-area of each pseudo-mouse
 dim_reduce_areas = {}; % define an empty variable that will store the dim reduction components of each pseudo-area of each pseud-mouse
 for area = 1:6 % loop over visual areas
-    load([repository_path,'\seeds\neuropixels_structure_STATE',num2str(area),'.mat'],'state') % load seed for tSNE analysis of a single area
+    load([data_path,'\seeds\neuropixels_structure_STATE',num2str(area),'.mat'],'state') % load seed for tSNE analysis of a single area
     rng(state) % set seed
     
     % reshape the neuronal activity of pseudo-mouse A from 3D (#cells x 90 time bins x 30 repeats) into 2D (#cells x 27000 time bins across repeats)
@@ -4778,7 +4779,7 @@ legend('boxoff')
 
 %% Figure 7A - Internal structure in reduced space - single animal v1 example across sessions
 
-load([repository_path,'\seeds\Figure7A.mat'],'state') % load seed for tsne visualization
+load([data_path,'\seeds\Figure7A.mat'],'state') % load seed for tsne visualization
 rng(state) % set seed
 
 area = 1; % area V1
@@ -10176,7 +10177,7 @@ V1_pseudo = cell2mat(neuropixels_population_vectors_tsne(valid_mice,area,nat_mov
 V1_pseudo = V1_pseudo(:,:,31:60); % subset the neuronal activity during block B (repeats 31-60)
 
 
-load([repository_path,'\seeds\FigureS7A_neuropixels.mat'],'state') % load seed for tSNE visualization
+load([data_path,'\seeds\FigureS7A_neuropixels.mat'],'state') % load seed for tSNE visualization
 rng(state) % set seed
 cells_rand_ind = randperm(size(V1_pseudo,1)); % random permutatuion on cells IDs that will later be subsampled from the entire population
 cell_num_list = [75,100,125,150,200,250,500,1000,1500]; % list of number of cells included in the analysis
@@ -10237,7 +10238,7 @@ valid_cells = find([active_sess1 & active_sess2 & active_sess3]); % active in al
 V1_pseudo = V1_pseudo(valid_cells,:,:); % include only cells that were active in all three sessions
 V1_pseudo(V1_pseudo==0) = 0.000001; % convert zero values into epsilon due to sparssness of data (required for tsne)
 
-load([repository_path,'\seeds\FigureS7A_calcium.mat'],'state') % load seed for tSNE visualization
+load([data_path,'\seeds\FigureS7A_calcium.mat'],'state') % load seed for tSNE visualization
 rng(state) % set seed
 
 cells_rand_ind = randperm(size(V1_pseudo,1)); % random permutatuion on cells IDs that will later be subsampled from the entire population
@@ -10300,7 +10301,7 @@ V1_pseudo = cell2mat(neuropixels_population_vectors_tsne(valid_mice,area,nat_mov
 V1_pseudo = V1_pseudo(:,:,31:60); % subset the neuronal activity during block B (repeats 31-60)
 
 
-load([repository_path,'\seeds\FigureS7A_neuropixels.mat'],'state')% load seed for PCA visualization
+load([data_path,'\seeds\FigureS7A_neuropixels.mat'],'state')% load seed for PCA visualization
 rng(state) % set seed
 cells_rand_ind = randperm(size(V1_pseudo,1)); % random permutatuion on cells IDs that will later be subsampled from the entire population
 cell_num_list = [75,100,125,150,200,250,500,1000,1500]; % list of number of cells included in the analysis
@@ -10361,7 +10362,7 @@ valid_cells = find([active_sess1 & active_sess2 & active_sess3]); % active in al
 V1_pseudo = V1_pseudo(valid_cells,:,:); % include only cells that were active in all three sessions
 V1_pseudo(V1_pseudo==0) = 0.000001; % convert zero values into epsilon due to sparssness of data (required for tsne)
 
-load([repository_path,'\seeds\FigureS7A_calcium.mat'],'state') % load seed for PCA visualization
+load([data_path,'\seeds\FigureS7A_calcium.mat'],'state') % load seed for PCA visualization
 rng(state) % set seed
 
 cells_rand_ind = randperm(size(V1_pseudo,1)); % random permutatuion on cells IDs that will later be subsampled from the entire population
@@ -10734,7 +10735,7 @@ for nat_movie = 1:2 % loop over natural movies
     end
 end
 
-load([repository_path,'\seeds\FigureS7E.mat'],'state') % load seed for tsne visualization
+load([data_path,'\seeds\FigureS7E.mat'],'state') % load seed for tsne visualization
 rng(state) % set seed
 dim_reduce_all = {}; % define empty variable that will store the tsne comp
 cells_ind = [];
@@ -10954,7 +10955,7 @@ for shuffle = 1:num_shuffle
     end
     
     min_num_cell = min(pseudo_cell_num(:));
-    %min_num_cell = 150;
+    
     subsampled_pseudo_mouseA = {};
     subsampled_pseudo_mouseB = {};
     subsampled_pseudo_mouseA_movie3 = {};
