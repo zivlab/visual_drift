@@ -1,10 +1,12 @@
-%% Load Neuropixels data
+%% Setup
 clear;clc;
 warning('off');
 
 % Define 'zivlab/visual_drift' repository path 
 repository_path = 'E:\downloads\visual_drift-main';
-addpath([repository_path,'\scripts']);
+addpath([repository_path,'\scripts']); % add the scripts folder path into MATLAB paths
+
+%% Load Neuropixels data
 
 % Define the path contining the neuropixels .mat files
 neuropixels_results_path = [repository_path,'\data\neuropixels\'];
@@ -86,7 +88,7 @@ for mouse = 1:length(neuropixels_mouse_list)
             if ~isempty(informative_rater_mat{nat_movie,area}) % check if are was recorded
                 
                 % Calculate population vecors based on the bins defined above:
-                pop_vector_info_trials = []; % will contain the binned neuronal activit
+                pop_vector_info_trials = []; % will contain binned neuronal activity
                 % rows - neuron ID
                 % columns - Time bin ID
                 % layers (3rd dim) - repeat ID
@@ -208,10 +210,10 @@ for area = 1:6
         
         % Bin the data into 90 bins instead of 30 bins for visualization only
         % (related to figures 6F, Figure S7A and Figure S7E):
-        frames_rate = 30;
-        repeats_movie2 = 30;
-        movie2_length = 30;
-        movie2_frames = frames_rate * movie2_length;
+        frames_rate = 30; % imaging frame rate (30 Hz).
+        repeats_movie2 = 30; % number of natural movie repeats across days (10 repeats in each session x 3 sessions = 30 movie repeats)
+        movie2_length = 30; % length of natural movie 1 (30 seconds)
+        movie2_frames = frames_rate * movie2_length; % number frames in a single natural movie 1 repeat (900 frames)
         movie2_bin_size = 10; % 10 frames per second
         binned_movie2 = ones(movie2_frames,1);
         movie2_bin_edges = 1:movie2_bin_size:movie2_frames;
@@ -222,10 +224,10 @@ for area = 1:6
         
         % Define binning parameters for 'Natural movie 3':
         frames_rate = 30; % imaging frame rate (30 Hz).
-        repeats_movie3 = 10;
-        movie3_length = 120;
-        movie3_frames = frames_rate * movie3_length;
-        movie3_bin_size = 4*frames_rate;
+        repeats_movie3 = 10; % number of natural movie repeats across blocks (5 repeats in each block x 2 blocks = 10 movie repeats)
+        movie3_length = 120; % length of natural movie 3 (120 seconds)
+        movie3_frames = frames_rate * movie3_length; % number frames in a single natural movie 1 repeat (3600 frames)
+        movie3_bin_size = 4*frames_rate; % 120 frames per second
         binned_movie3 = ones(movie3_frames,1);
         movie3_bin_edges = 1:movie3_bin_size:movie3_frames;
         for bin = 1:length(movie3_bin_edges)
@@ -236,8 +238,8 @@ for area = 1:6
         % Define binning parameters for NM3 VS DG decoding analysis
         % (Related to Fig. S7G):
         frames_rate = 30; % 10 frames per second
-        repeats_movie3_decode = 10;
-        movie3_bin_size_decode = 90;
+        repeats_movie3_decode = 10; % number of natural movie repeats across blocks (5 repeats in each block x 2 blocks = 10 movie repeats)
+        movie3_bin_size_decode = 90; % length of natural movie 3 (90 seconds)
         binned_movie3_decode = ones(movie3_frames,1);
         movie3_bin_edges_decode = 1:movie3_bin_size_decode:movie3_frames;
         for bin = 1:length(movie3_bin_edges_decode)
@@ -255,7 +257,6 @@ for area = 1:6
         natural_movie1_traces = reshape(united_traces_days_events,size(united_traces_days_events,1),27000); % natural movie 1
         natural_movie3_traces = filtered_traces_days_events{1,2}; % natural movie 3
         natural_movie_traces = {natural_movie1_traces,natural_movie3_traces,natural_movie1_traces,natural_movie3_traces}; % store neuronal responses of both movies
-        
         
         spont_blocks_repeats = 20;
         spont_length = 30;
@@ -281,65 +282,79 @@ for area = 1:6
         natural_movie1_running = cell2mat(natural_movie_running_sorted(:,1))';
         natural_movie1_pupil= cell2mat(natural_movie_pupil_sorted(:,1))';
         
-        % binning procedure for natural movies and behavioural measurments
-        for nat_movie = 1:4
-            pop_vector_info_trials = [];
-            binned_running_speed = [];
-            binned_pupil_size = [];
+       % Bin the neuronal activty and behavioural measurements for each of the presented visual stimuli.
+        for nat_movie = 1:4 % loop over natural movies
+           % Calculate population vecors based on the bins defined above:
+                pop_vector_info_trials = []; % will contain binned neuronal activity
+                % rows - neuron ID
+                % columns - Time bin ID
+                % layers (3rd dim) - repeat ID
+                
+            binned_running_speed = []; % will contain binned running speed
+            binned_pupil_size = [];  % will contain binned pupil size
             sub = 1;
-            for repeat = 1:repeats_movie(nat_movie)
-                frames_temp = [1:movie_frames(nat_movie)] + (movie_frames(nat_movie)*(repeat-1));
-                current_repeat = natural_movie_traces{nat_movie}(:,frames_temp);
-                if nat_movie ==1
-                    current_repeat_running = natural_movie1_running(:,frames_temp);
-                    current_repeat_pupil = natural_movie1_pupil(:,frames_temp);
+            for repeat = 1:repeats_movie(nat_movie) % loop over repeats
+                frames_temp = [1:movie_frames(nat_movie)] + (movie_frames(nat_movie)*(repeat-1)); % frames ids of the spesific movie repeat
+                current_repeat = natural_movie_traces{nat_movie}(:,frames_temp); % subsample the neuronal activity of the specific movie repeat
+                
+                if nat_movie ==1 % subsample behavioural measurements during natural movie 1
+                    current_repeat_running = natural_movie1_running(:,frames_temp); % running speed
+                    current_repeat_pupil = natural_movie1_pupil(:,frames_temp); % pupil size
                 end
-                for bin = 1:length(movie_bin_edges{nat_movie})
-                    pop_vector_info_trials(:,bin,sub) = nanmean(current_repeat(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2);
+                
+                % Average the neuronal activity  and behavioural measurements in the frames assigned to 
+                % the same temporal bin (e.i., calculating the population vector of each temporal bin)
+                for bin = 1:length(movie_bin_edges{nat_movie})  % loop over time bins
+                    pop_vector_info_trials(:,bin,sub) = mean(current_repeat(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2,'omitnan');  % average neuronal activity frames
+                    
                     if nat_movie ==1
-                        binned_running_speed(:,bin,sub)  = nanmean(current_repeat_running(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2);
-                        binned_pupil_size(:,bin,sub)  = nanmean(current_repeat_pupil(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2);
+                        binned_running_speed(:,bin,sub)  = mean(current_repeat_running(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2,'omitnan'); % average running speed frames
+                        binned_pupil_size(:,bin,sub)  = mean(current_repeat_pupil(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2,'omitnan');  % average pupil size frames
                     end
                 end
                 sub = sub + 1;
             end
-            calcium_population_vectors_across_mice(file,nat_movie) = {pop_vector_info_trials};
-            binned_running_speed_across_mice(file,nat_movie) = {binned_running_speed};
-            binned_pupil_size_across_mice(file,nat_movie) = {binned_pupil_size};
+            
+            calcium_population_vectors_across_mice(file,nat_movie) = {pop_vector_info_trials}; % Store the binned neuronal data for each brain area of each mouse
+            binned_running_speed_across_mice(file,nat_movie) = {binned_running_speed}; % Store the binned running speed of each mouse
+            binned_pupil_size_across_mice(file,nat_movie) = {binned_pupil_size}; % Store the binned pupil size of each mouse
         end
         
-        % spont activity
-        for nat_movie = 1:2
-            pop_vector_info_trials = [];
+        % Bin the neuronal activty during blocks of spontanous activity
+            % Calculate population vecors based on the bins defined above:
+                pop_vector_info_trials = []; % will contain binned neuronal activity
             sub = 1;
-            for repeat = 1:repeats_spont(nat_movie)
-                frames_temp = [1:spont_frames(nat_movie)] + (spont_frames(nat_movie)*(repeat-1));
-                current_repeat =spont_traces{nat_movie}(:,frames_temp);
-                for bin = 1:length(bin_edges_spont{nat_movie})
-                    pop_vector_info_trials(:,bin,sub) = nanmean(current_repeat(:, binned_spont_repeated{nat_movie}(frames_temp) == bin),2);
+            for repeat = 1:repeats_spont(1) % loop over repeats
+                frames_temp = [1:spont_frames(1)] + (spont_frames(1)*(repeat-1));  % frames ids of the spesific movie repeat
+                current_repeat =spont_traces{1}(:,frames_temp);  % subsample the neuronal activity of the specific movie repeat
+               
+                % Average the neuronal activity in the frames assigned to the same temporal bin
+                % (e.i., calculating the population vector of each temporal bin)
+                for bin = 1:length(bin_edges_spont{1})
+                    pop_vector_info_trials(:,bin,sub) = mean(current_repeat(:,binned_spont_repeated{1}(frames_temp) == bin),2,'omitnan');
                 end
                 sub = sub + 1;
             end
-            calcium_spont_population_vectors_across_mice(file,nat_movie) = {pop_vector_info_trials};
-        end
+            calcium_spont_population_vectors_across_mice(file,1) = {pop_vector_info_trials};
+      
+
+        raw_calcium_population_vectors_across_mice(file) = {raw_pop_vector_info_trials}; % binned activity raw df/f
+        calcium_drifting_gratings_across_mice(file) = filtered_traces_days_events(1,4); % binned drifting gratings
         
-        
-        % binned activity raw df/f
-        raw_calcium_population_vectors_across_mice(file) = {raw_pop_vector_info_trials};
-        calcium_drifting_gratings_across_mice(file) = filtered_traces_days_events(1,4);
-        
-        mean_cell_num_across_mice(file,:) = cellfun(@length,cell_registration);
-        imaging_depth_all_mice(file) = imaging_depth;
-        sorted_mouse_age(file,:) = sort(mouse_age);
+        mean_cell_num_across_mice(file,:) = cellfun(@length,cell_registration); % number of cells recorded in each imaging session
+        imaging_depth_all_mice(file) = imaging_depth; % field of view imaging depth
+        sorted_mouse_age(file,:) = sort(mouse_age); % age of the mouse in each imaging session (sorted)
     end
-    calcium_excitatory_population_vectors{area} = calcium_population_vectors_across_mice;
-    calcium_excitatory_drifting_gratings{area} =  calcium_drifting_gratings_across_mice;
-    calcium_excitatory_spont_population_vectors{area} = calcium_spont_population_vectors_across_mice;
-    calcium_excitatory_cell_count{area} =  mean_cell_num_across_mice;
-    calcium_excitatory_imaging_depth{area} = imaging_depth_all_mice;
-    calcium_excitatory_running_speed{area} = binned_running_speed_across_mice;
-    calcium_excitatory_pupil_size{area} = binned_pupil_size_across_mice;
-    calcium_excitatory_population_vectors_raw{area} = raw_calcium_population_vectors_across_mice;
+    % Store for each mouse the binned neuronal actiivty and behavioural measurements 
+    % in response to the different visual stimuli
+    calcium_excitatory_population_vectors{area} = calcium_population_vectors_across_mice; % natual movies
+    calcium_excitatory_drifting_gratings{area} =  calcium_drifting_gratings_across_mice; % drifting gratings
+    calcium_excitatory_spont_population_vectors{area} = calcium_spont_population_vectors_across_mice; % spont. activity
+    calcium_excitatory_cell_count{area} =  mean_cell_num_across_mice; % number of cells imaged in each session
+    calcium_excitatory_imaging_depth{area} = imaging_depth_all_mice; % FOV imaging depth
+    calcium_excitatory_running_speed{area} = binned_running_speed_across_mice; % running speed in each movie repeat
+    calcium_excitatory_pupil_size{area} = binned_pupil_size_across_mice; % pupil size in each movie repeat
+    calcium_excitatory_population_vectors_raw{area} = raw_calcium_population_vectors_across_mice; % raw df/f0 during natural movies
     calcium_excitatory_sorted_mouse_age{area} = sorted_mouse_age;
 end
 
@@ -358,19 +373,27 @@ clearvars -except repository_path neuropixels_population_vectors neuropixels_dri
 
 %% Load inhibitory calcium imaging data
 for area = [1,2,4]
+    % Define the path contining the inhibitory calcium imaging .mat files
     results_path = [repository_path,'\data\calcium_inhibitory\',brain_areas{area},'\'];
+    
+     % Create a list of all the inhibitory calcium imaging .mat files to be loaded
+    % each .mat file corresponds to a single calcium imaging recorded mouse
     mat_list = dir([results_path,'*.mat']);
     mat_list = {mat_list.name};
-    calcium_population_vectors_across_mice = {};
-    mean_cell_num_across_mice = [];
-    cre_line_across_mice = [];
-    for file =1:length(mat_list)
+    
+     % Define empty variable that will store data across all mice from the
+    % same brain area:
+    calcium_population_vectors_across_mice = {}; % Binned activity (events) during natural movies
+    mean_cell_num_across_mice = []; % Number of recorded cells for each mouse in each area
+    cre_line_across_mice = []; % Recorded cell type (based on the Cre line of the mouse) 
+    for file =1:length(mat_list) % loop over mice
         clc;
         disp(['Loading calcium imaging inhibitory data:'])
         disp(['Area: ',num2str(area),'\',num2str(3)])
         disp(['Mouse: ',num2str(file),'\',num2str(length(mat_list))])
-        load([results_path,mat_list{file}])
+        load([results_path,mat_list{file}]) % load .mat file for current mouse
         
+        % check which cre line the mouse belongs to
         if ~isempty(strfind(cre_line,'Sst') == 1)
             cre_line_across_mice(file) = 1; %sst
         elseif ~isempty(strfind(cre_line,'Vip') == 1)
@@ -379,23 +402,28 @@ for area = [1,2,4]
             cre_line_across_mice(file) = 3; %pvalb
         end
         
-        frames_rate = 30;
-        repeats_movie1 = 30;
-        movie1_length = 30;
-        movie1_frames = frames_rate * movie1_length;
-        movie1_bin_size = 30;
+         % Define binning parameters for 'Natural movie 1':
+        frames_rate = 30; % imaging frame rate (30 Hz).
+        repeats_movie1 = 30; % number of natural movie repeats across days (10 repeats in each session x 3 sessions = 30 movie repeats)
+        movie1_length = 30; % length of natural movie 1 (30 seconds)
+        movie1_frames = frames_rate * movie1_length; % number frames in a single natural movie 1 repeat (900 frames)
+        movie1_bin_size = 30; % number of frames in each bin of neuronal activity (1 bin = 30 frames = 1 sec)
+        
+        % Define bin ID for each frame in the natural movie 1:
+        % e.g., frames 1-30 = 1, frames 31-60 = 2 ... frames 3481-3600 = 30
         binned_movie1 = ones(movie1_frames,1);
         movie1_bin_edges = 1:movie1_bin_size:movie1_frames;
         for bin = 1:length(movie1_bin_edges)
             binned_movie1(movie1_bin_edges(bin):movie1_bin_edges(bin)+movie1_bin_size-1) = bin;
         end
         binned_movie_repeated1 = repmat(binned_movie1,[repeats_movie1,1]);
-        
-        
-        repeats_movie3 = 10;
-        movie3_length = 120;
-        movie3_frames = frames_rate * movie3_length;
-        movie3_bin_size = 120;
+
+       % Define binning parameters for 'Natural movie 3':
+        frames_rate = 30; % imaging frame rate (30 Hz).
+        repeats_movie3 = 10; % number of natural movie repeats across blocks (5 repeats in each block x 2 blocks = 10 movie repeats)
+        movie3_length = 120; % length of natural movie 3 (120 seconds)
+        movie3_frames = frames_rate * movie3_length; % number frames in a single natural movie 1 repeat (3600 frames)
+        movie3_bin_size = 4*frames_rate; % 120 frames per second
         binned_movie3 = ones(movie3_frames,1);
         movie3_bin_edges = 1:movie3_bin_size:movie3_frames;
         for bin = 1:length(movie3_bin_edges)
@@ -403,44 +431,48 @@ for area = [1,2,4]
         end
         binned_movie_repeated3 = repmat(binned_movie3,[repeats_movie3,1]);
         
+        % store bin information for each of the natural movies
         repeats_movie = [repeats_movie1,repeats_movie3];
         movie_frames = [movie1_frames,movie3_frames];
         movie_bin_edges = {movie1_bin_edges,movie3_bin_edges};
         binned_movie_repeated = {binned_movie_repeated1,binned_movie_repeated3};
+        
+         % load neuronal responses for different natural movies 
         natural_movie1_traces = reshape(united_traces_days_events,size(united_traces_days_events,1),27000);
         natural_movie3_traces = filtered_traces_days_events{1,2};
         natural_movie_traces = {natural_movie1_traces,natural_movie3_traces};
-        
-        natural_movie1_running = cell2mat(natural_movie_running_sorted(:,1)')';
-        natural_movie3_running = natural_movie_running{1,2}';
-        natural_movie_running = {natural_movie1_running,natural_movie3_running};
-        
-        
-        
-        for nat_movie = 1:2
-            pop_vector_info_trials = [];
+
+          % Bin the neuronal activty and behavioural measurements for each of the presented visual stimuli.
+        for nat_movie = 1:2 % loop over natural movies
+            % Calculate population vecors based on the bins defined above:
+            pop_vector_info_trials = []; % will contain binned neuronal activity
+            % rows - neuron ID
+            % columns - Time bin ID
+            % layers (3rd dim) - repeat ID
+                
             sub = 1;
-            for repeat = 1:repeats_movie(nat_movie)
-                frames_temp = [1:movie_frames(nat_movie)] + (movie_frames(nat_movie)*(repeat-1));
-                current_repeat = natural_movie_traces{nat_movie}(:,frames_temp);
-                for bin = 1:length(movie_bin_edges{nat_movie})
-                    pop_vector_info_trials(:,bin,sub) = nanmean(current_repeat(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2);
+            for repeat = 1:repeats_movie(nat_movie) % loop over repeats
+                frames_temp = [1:movie_frames(nat_movie)] + (movie_frames(nat_movie)*(repeat-1)); % frames ids of the spesific movie repeat
+                current_repeat = natural_movie_traces{nat_movie}(:,frames_temp); % subsample the neuronal activity of the specific movie repeat
+               
+                % Average the neuronal activity  and behavioural measurements in the frames assigned to 
+                % the same temporal bin (e.i., calculating the population vector of each temporal bin)
+                for bin = 1:length(movie_bin_edges{nat_movie}) % loop over time bins
+                    pop_vector_info_trials(:,bin,sub) = mean(current_repeat(:,binned_movie_repeated{nat_movie}(frames_temp) == bin),2,'omitnan');
                 end
                 sub = sub + 1;
             end
-            calcium_population_vectors_across_mice(file,nat_movie) = {pop_vector_info_trials};
+            calcium_population_vectors_across_mice(file,nat_movie) = {pop_vector_info_trials}; % Store the binned neuronal data for each brain area of each mouse
         end
         
-        mean_cell_num_across_mice(file,:) = cellfun(@length,cell_registration);
-        
-        
-        
-    end
-    calcium_inhibitory_population_vectors{area} = calcium_population_vectors_across_mice;
-    calcium_inhibitory_cell_count{area} =  mean_cell_num_across_mice;
-    calcium_inhibitory_cre_line{area} =  cre_line_across_mice;
-end
+        mean_cell_num_across_mice(file,:) = cellfun(@length,cell_registration); % number of cells recorded in each imaging session
 
+    end
+
+    calcium_inhibitory_population_vectors{area} = calcium_population_vectors_across_mice; % store the binned neuronal activity during natural movies
+    calcium_inhibitory_cell_count{area} = mean_cell_num_across_mice; % store the number of recorded cells in each session
+    calcium_inhibitory_cre_line{area} = cre_line_across_mice; % store the cre line information 
+end
 
 clc;
 disp(['Loading calcium imaging inhibitory data:'])
@@ -8751,6 +8783,7 @@ for area = 1:6 % loop over visual areas
     
     text(0.75,0.85,brain_areas{area},'Units','normalized','FontSize',15)
     xlim([0.5 3.5])
+
     if area >3
         xtickangle(15)
         set(gca,'xtick',1:3,'xticklabel',{'Within session','Proximal sessions','Distal sessions'})
@@ -8761,9 +8794,9 @@ for area = 1:6 % loop over visual areas
         ylabel('Ensemble rate correlation')
     end
     
-    legend(plt,{'Nat. Mov.','Spontaneous'},'Location','southwest','fontsize',8)
+    legend(plt,{'Nat. Mov.','Spontaneous'},'Location','best','fontsize',8)
     legend('boxoff')
-    ylim([0.2 max(ylim)])
+    ylim([min(ylim)-0.1 max(ylim)])
 end
 
 % correct for multiple comparisons using bonferroni-holm method
