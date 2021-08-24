@@ -1,13 +1,24 @@
-%% Setup
+%% Representational drift in the mouse visual cortex
+% This script contains all the relevent analyses required to reproduce the 
+% results presented in Deitch et al., 2021.
+%
+% Each analysis corresponds to a single panel in the paper and can be run
+% separately from the rest of the analyses.
+%
+% Before running the sections of the main anlyses (Figures 1-7 and Figure S1-S7), 
+% it is required to run the setup sections (part A-D) which are responsible to 
+% load the processed data and set the relevent directories pathways.
+
+%% Setup part A - Setting scripts and data directories pathways
 clear;clc;
 warning('off');
 
-% Define scripts and data paths
 data_path = 'E:\downloads\visual_drift-main\data';
 scripts_path = 'E:\downloads\visual_drift-main\scripts';
-addpath(scripts_path); % add the scripts folder path into MATLAB paths
+addpath(scripts_path); % add the scripts folder path into MATLAB paths to run scripts from a different directory
+% rmpath(scripts_path); % add the scripts folder path into MATLAB path
 
-%% Load Neuropixels data
+%% Setup part B - Load Neuropixels data
 
 % Define the path contining the neuropixels .mat files
 neuropixels_results_path = [data_path,'\neuropixels\'];
@@ -160,11 +171,11 @@ clc;
 disp(['Loading Neuropixels data:'])
 disp('DONE!')
 
-clearvars -except repository_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
+clearvars -except data_path scripts_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
     neuropixels_running_speed neuropixels_pupil_size neuropixels_cell_count movie_repeats...
     neuropixels_population_vectors_tsne
 
-%% Load excitatory calcium imaging data
+%% Setup part C - Load excitatory calcium imaging data
 for area = 1:6
     % Define the path contining the excitatory calcium imaging .mat files
     results_path = [data_path,'\calcium_excitatory\',brain_areas{area},'\'];
@@ -363,7 +374,7 @@ clc;
 disp(['Loading calcium imaging excitatory data:'])
 disp('DONE!')
 
-clearvars -except repository_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
+clearvars -except data_path scripts_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
     neuropixels_running_speed neuropixels_pupil_size neuropixels_cell_count movie_repeats...
     calcium_excitatory_population_vectors calcium_excitatory_drifting_gratings...
     calcium_excitatory_spont_population_vectors calcium_excitatory_cell_count...
@@ -372,7 +383,7 @@ clearvars -except repository_path neuropixels_population_vectors neuropixels_dri
     calcium_excitatory_sorted_mouse_age neuropixels_population_vectors_tsne
 
 
-%% Load inhibitory calcium imaging data
+%% Setup part D - Load inhibitory calcium imaging data
 for area = [1,2,4]
     % Define the path contining the inhibitory calcium imaging .mat files
     results_path = [data_path,'\calcium_inhibitory\',brain_areas{area},'\'];
@@ -479,7 +490,7 @@ clc;
 disp(['Loading calcium imaging inhibitory data:'])
 disp('DONE!')
 
-clearvars -except repository_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
+clearvars -except data_path scripts_path neuropixels_population_vectors neuropixels_drifting_gratings brain_areas...
     neuropixels_running_speed neuropixels_pupil_size neuropixels_cell_count movie_repeats...
     calcium_excitatory_population_vectors calcium_excitatory_drifting_gratings...
     calcium_excitatory_spont_population_vectors calcium_excitatory_cell_count...
@@ -491,7 +502,7 @@ clearvars -except repository_path neuropixels_population_vectors neuropixels_dri
 
 brain_areas = {'V1','LM','AL','PM','RL','AM','dLGN','LP'};
 
-%% Define color schemes and load colormaps
+%% Setup part E - Define color schemes and load colormaps
 colors = [0 0.7 0.8 ;0 0.7 0.6; 0.9 0.8 0.2; 0.9 0.6 0.2; 0.9 0.5 0.7; 1 0.3 0.4;...
     0.4 0.7 0.8; 0.4 0.7 0.6; 0.5 0.5 0.5; 0.4 0.4 0.4; 0.3 0.3 0.3; 0.1 0.1 0.1];
 colors2 = [0 0.5 0.6 ;0 0.5 0.4; 0.7 0.6 0; 0.7 0.4 0; 0.7 0.3 0.5; 0.8 0.1 0.2;...
@@ -519,7 +530,7 @@ end
 
 % visualization of cell counts distributions
 figure
-figure_boxplot(average_cell_count(:,1:6))
+figure_boxplot(average_cell_count(:,1:6));
 set(gca,'xticklabels',brain_areas(1:6))
 xtickangle(90)
 ylabel('Cell count')
@@ -599,7 +610,7 @@ valid_cell_counts(valid_cell_counts==0) = NaN; % conver 0 values into NaNs
 sum(valid_cell_counts(:,1:6)>0)
 % visualization of cell counts distributions
 figure
-figure_boxplot(valid_cell_counts(:,1:6)) % visualize only visual cortical areas (columns 1-6)
+figure_boxplot(valid_cell_counts(:,1:6)); % visualize only visual cortical areas (columns 1-6)
 set(gca,'xticklabels',brain_areas(1:6))
 xtickangle(90)
 ylabel('Cell count')
@@ -3306,10 +3317,17 @@ end
 % define color schemes for visualization
 new_colors = [0 0.7 0.8;0.6 0.6 0.6;0.6 0.2 0.6;0.4 0.4 0.4];
 new_colors2 = [0 0.5 0.6;0.5 0.5 0.5;0.5 0.1 0.4;0.3 0.3 0.3];
-plt = []; % define empty variable that will store plot information for each area
 rate_similarity_index = {}; % define empty variable that will store ensemble rate similarity index values of indevidual mice across areas
 figure('units','normalized','position',[0.3 0.3 0.25 0.4]) % visualization of ensemble rate similarity index across areas
 for area = 1:4 % loop over areas
+     if area <3
+    subplot(1,2,1)
+    ylabel('Ensemble rate similarity index')
+    ylim([-0.055 0.001])
+    else
+        subplot(1,2,2)
+        ylim([-0.12 0.001])
+    end
     current_area = elapse_repeat_rate_corr_area{area}; % subset ensemble rate corr values of specific visual area
     rate_similarity_index{area} = [current_area-current_area(:,1)]./[current_area+current_area(:,1)]; % calculate for each mouse its ensemble rate similarity index
     
@@ -3317,23 +3335,19 @@ for area = 1:4 % loop over areas
     std_elapse_repeat = std(rate_similarity_index{area},'omitnan'); % calculate standard deviation across mice
     ste_elapse_repeat = std_elapse_repeat./sqrt(size(current_area,1)); % calculate standard error across mice
     
+    
     x = [1:length(mean_elapse_repeat)]';
     y = mean_elapse_repeat';
     dy = ste_elapse_repeat';
     
     hold on
     fill([x;flipud(x)],[y-dy;flipud(y+dy)],new_colors(area,:),'linestyle','none','facealpha',0.4);
-    plt(area) = plot(y,'color',new_colors2(area,:),'linewidth',3);
+   plot(y,'color',new_colors2(area,:),'linewidth',3);
+   xlim([0 30])
+   set(gca,'xtick',[1,10,20, 29])
 end
-lgd = legend(plt,brain_areas(area_list));
-legend('boxoff')
-lgd.Position = [0.2 0.225 0.1 0.1];
-text(0.05,0.075,'1 repeat = 30 seconds','Units','normalized','FontSize',11)
-set(gca,'xtick',[1,10,20,29])
 xlabel('Elapsed time (# of movie repeats)')
-ylabel('Ensemble rate similarity index')
-title('Neuropixels - seconds to minutes')
-
+suptitle('Neuropixels - seconds to minutes')
 
 % statistical analysis for differences across pairs of visual areas
 V1_rate_corr = rate_similarity_index{1};  % subset ensemble rate similarity indices of area V1
@@ -3342,17 +3356,20 @@ V2_rate_corr = rate_similarity_index{2}; % subset ensemble rate similarity indic
 LGN_rate_corr = rate_similarity_index{3}; % subset ensemble rate similarity indices of area dLGN
 LP_rate_corr = rate_similarity_index{4}; % subset ensemble rate similarity indices of area LP
 
+
 % perform multiple Mann-Whitney rank-sum tests btween pairs of visual
 % areas and visualize the results on the existing figure
 for trial = 1:29 % loop over time intervals
-    p = ranksum(V1_rate_corr(:,trial),V2_rate_corr(:,trial));
+    p = ranksum(V1_rate_corr(:,trial),V2_rate_corr(:,trial)); % perform two-sided Mann-Whitney rank-sum between area V1 and area LM
     if p < 0.05
+         subplot(1,2,1)
         hold on
         plot(trial,0,'*','color',new_colors(1,:),'markersize',8)
     end
     
     p = ranksum(LGN_rate_corr(:,trial),LP_rate_corr(:,trial)); % perform two-sided Mann-Whitney rank-sum between area dLGN and area LP
     if p < 0.05
+         subplot(1,2,2)
         hold on
         plot(trial,0.005,'*','color',new_colors(3,:),'markersize',8)
     end
@@ -3412,16 +3429,25 @@ end
 % define color schemes for visualization
 new_colors = [0 0.7 0.8;0.6 0.6 0.6;0.6 0.2 0.6;0.4 0.4 0.4];
 new_colors2 = [0 0.5 0.6;0.5 0.5 0.5;0.5 0.1 0.4;0.3 0.3 0.3];
-plt = []; % define empty variable that will store plot information for each area
 tuning_similarity_index = {}; % define empty variable that will store tuning curve similarity index values of indevidual mice across areas
 figure('units','normalized','position',[0.3 0.3 0.25 0.4]) % visualization of tuning curve similarity index across areas
-for area = 1:4
-    current_area = elapse_repeat_tuning_corr_area{area}; % subset tuning curve corr values of specific visual area
+for area = 1:4 % loop over areas
+    if area <3
+        subplot(1,2,1)
+        ylabel('Ensemble rate similarity index')
+        ylim([-0.2 0.01])
+    else
+        subplot(1,2,2)
+        ylim([-0.45 0.01])
+    end
+    
+      current_area = elapse_repeat_tuning_corr_area{area}; % subset tuning curve corr values of specific visual area
     tuning_similarity_index{area} = [current_area-current_area(:,1)]./[current_area+current_area(:,1)]; % calculate for each mouse its tuning curve similarity index
     
     mean_elapse_repeat = mean(tuning_similarity_index{area},'omitnan'); % calculate mean tuning curve similarity index across mice
     std_elapse_repeat = std(tuning_similarity_index{area},'omitnan'); % calculate standard deviation across mice
     ste_elapse_repeat = std_elapse_repeat./sqrt(size(current_area,1)); % calculate standard error across mice
+    
     
     x = [1:length(mean_elapse_repeat)]';
     y = mean_elapse_repeat';
@@ -3430,12 +3456,11 @@ for area = 1:4
     hold on
     fill([x;flipud(x)],[y-dy;flipud(y+dy)],new_colors(area,:),'linestyle','none','facealpha',0.4);
     plt(area) = plot(y,'color',new_colors2(area,:),'linewidth',3);
+    set(gca,'xtick',[1,10,20,29])
+    xlim([0 30])
 end
-text(0.05,0.075,'1 repeat = 30 seconds','Units','normalized','FontSize',11)
-set(gca,'xtick',[1,10,20,29],'ytick',[-0.4:0.1:0])
 xlabel('Elapsed time (# of movie repeats)')
-ylabel('Tuning curve similarity index')
-title('Neuropixels - seconds to minutes')
+suptitle('Neuropixels dataset:')
 
 % statistical analysis for differences across pairs of visual areas
 V1_tuning_corr = tuning_similarity_index{1}; % subset tuning curve similarity indices of area V1
@@ -3450,18 +3475,17 @@ for trial = 1:29 % loop over time intervals
     p = ranksum(V1_tuning_corr(:,trial),V2_tuning_corr(:,trial)); % perform two-sided Mann-Whitney rank-sum between area V1 and area LM
     if p < 0.05
         hold on
-        plot(trial,0,'*','color',new_colors(1,:),'markersize',8)
+        subplot(1,2,1)
+        plot(trial,0.005,'*','color',[0.4 0.4 0.4],'markersize',8)
     end
     
     p = ranksum(LGN_tuning_corr(:,trial),LP_tuning_corr(:,trial)); % perform two-sided Mann-Whitney rank-sum between area dLGN and area LP
     if p < 0.05
         hold on
-        plot(trial,-0.4,'*','color',new_colors(3,:),'markersize',8)
+        subplot(1,2,2)
+        plot(trial,0.005,'*','color',[0.4 0.4 0.4],'markersize',8)
     end
 end
-lgd = legend(plt,brain_areas(area_list));
-legend('boxoff')
-lgd.Position = [0.2 0.225 0.1 0.1];
 
 %% Figure 5C - Visual hierarchy - ensemble rate correlation between movie repeats - calcium imaging
 
@@ -10928,110 +10952,132 @@ lgd.Position = [0.75 0.85 0.05 0.05];
 
 %% Figure S7G - Between pseudo-mice decoder using NM3 compared to DG
 
-num_shuffle = 1000;
-pseudo_mice_decoding_acc = nan(num_shuffle,6);
-pseudo_mice_decoding_acc_movie3 = nan(num_shuffle,6);
-for shuffle = 1:num_shuffle
-    clc;[shuffle]
+num_shuffle = 1000; % number of pseudo-mice realizations
+pseudo_mice_decoding_acc = nan(num_shuffle,6); % define an empty variable that will store the decoder results for drifting gratings
+pseudo_mice_decoding_acc_movie3 = nan(num_shuffle,6); % define an empty variable that will store the decoder results for natural movie 3
+for shuffle = 1:num_shuffle % loop over realizations
+    clc;
+    disp(['Performing between pseudo-mice decoding. Realization: ',num2str(shuffle),'/',num2str(num_shuffle)])
     
-    pseudo_mouseA =  {};
-    pseudo_mouseB = {};
-    pseudo_mouseA_movie3 =  {};
-    pseudo_mouseB_movie3 = {};
-    pseudo_cell_num = [];
-    for area = 1:6
-        current_area_gratings = calcium_excitatory_drifting_gratings{area}';
-        current_area_movie3 = calcium_excitatory_population_vectors{area}(:,4);
-        pseudo_mouseA_ind = sort(randperm(length(current_area_gratings),round(length(current_area_gratings)/2)));
-        pseudo_mouseB_ind = find(~ismember([1:length(current_area_gratings)],pseudo_mouseA_ind));
+    % for each visual area in each pseudo mouse, pool all units across mice
+    % to create 12 pseudo areas (6 areas x 2 pseudo-mice)
+    pseudo_mouseA =  {};% define an empty variable that will store the pooled cellss across mice for each pseudo-area of pseudo-mouse A during drifting gratings
+    pseudo_mouseB = {};% define an empty variable that will store the pooled cellss across mice for each pseudo-area of pseudo-mouse B during drifting gratings
+    pseudo_mouseA_movie3 =  {};% define an empty variable that will store the pooled cellss across mice for each pseudo-area of pseudo-mouse A during natural movie 3
+    pseudo_mouseB_movie3 = {};% define an empty variable that will store the pooled cellss across mice for each pseudo-area of pseudo-mouse BA during natural movie 3
+    pseudo_cell_num = []; % define an empty variable that will store the number of units in each pseudo-area
+    for area = 1:6 % loop over areas
+        current_area_gratings = calcium_excitatory_drifting_gratings{area}'; % subset neuronal activity of single area during drifting gratings
+        current_area_movie3 = calcium_excitatory_population_vectors{area}(:,4); % subset neuronal activity of single area during natural movie 3
+        pseudo_mouseA_ind = sort(randperm(length(current_area_gratings),round(length(current_area_gratings)./2))); % indices for group A (pseudo-mouse A)
+        pseudo_mouseB_ind = find(~ismember([1:length(current_area_gratings)],pseudo_mouseA_ind)); % indices for group B (pseudo-mouse B)
         
-        pseudo_mouseA{area} = cell2mat(current_area_gratings(pseudo_mouseA_ind));
-        pseudo_mouseB{area} = cell2mat(current_area_gratings(pseudo_mouseB_ind));
+        pseudo_mouseA{area} = cell2mat(current_area_gratings(pseudo_mouseA_ind)); % pool across mice of group A during drifting gratings
+        pseudo_mouseB{area} = cell2mat(current_area_gratings(pseudo_mouseB_ind)); % pool across mice of group B during drifting gratings
         
-        pseudo_mouseA_movie3{area} = cell2mat(current_area_movie3(pseudo_mouseA_ind));
-        pseudo_mouseB_movie3{area} = cell2mat(current_area_movie3(pseudo_mouseB_ind));
+        pseudo_mouseA_movie3{area} = cell2mat(current_area_movie3(pseudo_mouseA_ind)); % pool cells across mice of group A during natural movie 3
+        pseudo_mouseB_movie3{area} = cell2mat(current_area_movie3(pseudo_mouseB_ind)); % pool cells across mice of group B during natural movie 3
         
-        pseudo_cell_num(:,area) = [size(pseudo_mouseA{area},1);size(pseudo_mouseB{area},1)];
+        pseudo_cell_num(:,area) = [size(pseudo_mouseA{area},1);size(pseudo_mouseB{area},1)]; % store number of cells in each pseudo area
     end
     
+     % min_cell_num - the minimal number of cells across pseudo-areas and pseudo-mice.
+    % this number will be used to randomly subsample the same number of cells for all pseudo-ares 
     min_num_cell = min(pseudo_cell_num(:));
     
-    subsampled_pseudo_mouseA = {};
-    subsampled_pseudo_mouseB = {};
-    subsampled_pseudo_mouseA_movie3 = {};
-    subsampled_pseudo_mouseB_movie3 = {};
-    for area = 1:6
-        rand_cells_pseudoA = sort(randperm(pseudo_cell_num(1,area),min_num_cell));
-        rand_cells_pseudoB = sort(randperm(pseudo_cell_num(2,area),min_num_cell));
+    subsampled_pseudo_mouseA = {}; % define an empty variable that will store the subsampled units for each pseudo-area of pseudo-mouse A during drifting gratings
+    subsampled_pseudo_mouseB = {}; % define an empty variable that will store the subsampled units for each pseudo-area of pseudo-mouse B during drifting gratings
+    subsampled_pseudo_mouseA_movie3 = {}; % define an empty variable that will store the subsampled units for each pseudo-area of pseudo-mouse A during natural movie 3
+    subsampled_pseudo_mouseB_movie3 = {}; % define an empty variable that will store the subsampled units for each pseudo-area of pseudo-mouse B during natural movie 3
+    
+    
+    for area = 1:6 % loop over areas
+        rand_cells_pseudoA = sort(randperm(pseudo_cell_num(1,area),min_num_cell)); % random subsample of cells from pseudo mouse A
+        rand_cells_pseudoB = sort(randperm(pseudo_cell_num(2,area),min_num_cell)); % random subsample of cells from pseudo mouse B
         
-        subsampled_pseudo_mouseA{area} = pseudo_mouseA{area}(rand_cells_pseudoA,:,:,:);
+        % random sampling #min_cell_num of cells from each pseudo-area
+        subsampled_pseudo_mouseA{area} = pseudo_mouseA{area}(rand_cells_pseudoA,:,:,:); 
         subsampled_pseudo_mouseB{area} =  pseudo_mouseB{area}(rand_cells_pseudoB,:,:,:);
         
         subsampled_pseudo_mouseA_movie3{area} = pseudo_mouseA_movie3{area}(rand_cells_pseudoA,:,:,:);
         subsampled_pseudo_mouseB_movie3{area} =  pseudo_mouseB_movie3{area}(rand_cells_pseudoB,:,:,:);
     end
     
-    all_pseudo_mouseA_structures = [];
-    all_pseudo_mouseB_structures = [];
     
-    all_pseudo_mouseA_structures_movie3 = [];
-    all_pseudo_mouseB_structures_movie3 = [];
+
+    % calculating the internal structures for each movie repeat for all
+    % pseudo-areas of both example pseudo-mice
+    all_pseudo_mouseA_structures = [];% define an empty variable the will store the internal structures of drifting gratings for pseudo-mouse A
+    all_pseudo_mouseB_structures = [];% define an empty variable the will store the internal structures of drifting gratings for pseudo-mouse B
+    
+    all_pseudo_mouseA_structures_movie3 = [];% define an empty variable the will store the internal structures of natural movie 3 for pseudo-mouse A
+    all_pseudo_mouseB_structures_movie3 = [];% define an empty variable the will store the internal structures of natural movie 3 for pseudo-mouse B
     
     for area = 1:6
         current_pseudoA_sorted = [];
         current_pseudoB_sorted = [];
-        for ori = 1:8
-            for freq = 1:size(subsampled_pseudo_mouseA{area},4)
+        % reshape neuronal activity during drifting grating from 4D into 3D
+        % (#cells by 40 direction x temporal freq. combinations x 3 blocks)
+        for ori = 1:8 % loop over directions
+            for freq = 1:size(subsampled_pseudo_mouseA{area},4) % loop over temporal freqs
                 current_pseudoA_sorted = [current_pseudoA_sorted,subsampled_pseudo_mouseA{area}(:,ori,:,freq)];
                 current_pseudoB_sorted = [current_pseudoB_sorted,subsampled_pseudo_mouseB{area}(:,ori,:,freq)];
             end
         end
+         % average neuronal activity of the first two blocks of drifting gratings and calculate the internal structure
+        pseudo_mouseA_structure = corr(mean(current_pseudoA_sorted(:,:,1:2),3,'omitnan'),'rows','pairwise');
+        pseudo_mouseB_structure = corr(mean(current_pseudoB_sorted(:,:,1:2),3,'omitnan'),'rows','pairwise');
         
-        pseudo_mouseA_structure = corr(nanmean(current_pseudoA_sorted(:,:,1:2),3),'rows','pairwise');
-        pseudo_mouseB_structure = corr(nanmean(current_pseudoB_sorted(:,:,1:2),3),'rows','pairwise');
+         % average neuronal activity across the two blocks of natural movie 3 and calculate the internal structure
+        pseudo_mouseA_structure_movie3 = corr(mean(subsampled_pseudo_mouseA_movie3{area},3,'omitnan'),'rows','pairwise');
+        pseudo_mouseB_structure_movie3 = corr(mean(subsampled_pseudo_mouseB_movie3{area},3,'omitnan'),'rows','pairwise');
         
-        pseudo_mouseA_structure_movie3 = corr(nanmean(subsampled_pseudo_mouseA_movie3{area},3),'rows','pairwise');
-        pseudo_mouseB_structure_movie3 = corr(nanmean(subsampled_pseudo_mouseB_movie3{area},3),'rows','pairwise');
+        triu_ind = boolean(triu(ones(size(pseudo_mouseA_structure,1)),1)); % will be used to vectorize the upper half of the internal structures
         
-        triu_ind = boolean(triu(ones(size(pseudo_mouseA_structure,1)),1));
+        % vectorize the upper half and store the internal structure
         all_pseudo_mouseA_structures(:,area) = pseudo_mouseA_structure(triu_ind);
         all_pseudo_mouseB_structures(:,area) = pseudo_mouseB_structure(triu_ind);
         
         all_pseudo_mouseA_structures_movie3(:,area) = pseudo_mouseA_structure_movie3(triu_ind);
         all_pseudo_mouseB_structures_movie3(:,area) = pseudo_mouseB_structure_movie3(triu_ind);
-        
-        
-        
     end
     
     
-    permutations = flipud(perms([1:6]));
-    similarity_vals = [];
-    similarity_vals_movie3 = [];
-    for perm = 1:size(permutations,1)
-        current_perm = permutations(perm,:);
+     % calculating the similarity between the internal structures of a
+    % reference mouse (pseudo-mouse A) and all 720 permutations of the test
+    % mouse (pseudo-mouse B)
+    permutations = flipud(perms([1:6]));% define a matrix with all possible permutations
+    similarity_vals = []; % define an empty variable that will store the total similarity (correlation sum) between non-shuffled pseudo-mice for drifting gratings
+    similarity_vals_movie3 = [];  % define an empty variable that will store the total similarity (correlation sum) between non-shuffled pseudo-mice for natural movie 3
+    for perm = 1:size(permutations,1) % loop over permutations
+        current_perm = permutations(perm,:); % set the current permutations
+        
+         % calculate the correlation sum between thedrifting gratings internal structures of reference and permutated pseudo-mice
         similarity_vals(perm) =  sum(diag(corr(all_pseudo_mouseA_structures,...
             all_pseudo_mouseB_structures(:,current_perm))));
         
+         % calculate the correlation sum between the natural movie 3 internal structures of reference and permutated pseudo-mice
         similarity_vals_movie3(perm) =  sum(diag(corr(all_pseudo_mouseA_structures_movie3,...
             all_pseudo_mouseB_structures_movie3(:,current_perm))));
     end
     
-    [~,I] = max(similarity_vals);
-    pseudo_mice_decoding_acc(shuffle,:) = permutations(I,:) == [1:6];
+    [~,I] = max(similarity_vals); % find the permutation with the highest similarity for drifting gratings
+    pseudo_mice_decoding_acc(shuffle,:) = permutations(I,:) == [1:6]; % assess decoder prediction for drifting gratings
     
-    [~,I] = max(similarity_vals_movie3);
-    pseudo_mice_decoding_acc_movie3(shuffle,:) = permutations(I,:) == [1:6];
+    [~,I] = max(similarity_vals_movie3); % find the permutation with the highest similarity for natural movie 3
+    pseudo_mice_decoding_acc_movie3(shuffle,:) = permutations(I,:) == [1:6]; % assess decoder prediction for natural movie 3
     
 end
 
-acc_DG= 100*(sum(pseudo_mice_decoding_acc)./num_shuffle);
-acc_NM3 = 100*(sum(pseudo_mice_decoding_acc_movie3)./num_shuffle);
+% calculate decoder overall performance across all realizations
+acc_DG = 100*(sum(pseudo_mice_decoding_acc)./num_shuffle); % drifting gratings
+acc_NM3 = 100*(sum(pseudo_mice_decoding_acc_movie3)./num_shuffle); % natural movie 3
 
-figure
-hold on
-plt = [];
+
+plt = [];% define empty variable to store plot information for decoder performance
 xticks = [];
+figure % visualize decoder performance
+hold on
 for area = 1:6
     xticks(area) = nanmean([0.75+1.5*(area-1),1.25+1.5*(area-1)]);
     plt(1) = bar(0.75+1.5*(area-1),acc_NM3(area),'facecolor',[0.7 0.7 0.7]-0.2,'edgecolor','none','barwidth',0.5);
@@ -11046,7 +11092,6 @@ ylabel({'Successful classifications ';'between pseudo-mice (%)'})
 lgd = legend(plt,{'NM3','DG'});
 legend('boxoff')
 lgd.Position = [0.75 0.85 0.05 0.05];
-
 
 %% Figure S7H - Internal structure stability VS PV stability without normalization
 subset_population_vectors = {};
