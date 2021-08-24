@@ -1,6 +1,3 @@
-# visual_drift
-Repository containing scripts for Deitch et al., (2021)
-
 #  Representational drift in the mouse visual cortex
 This repository includes analyses and processed data presented in Deitch et al., 2021.
 
