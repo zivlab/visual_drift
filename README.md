@@ -8,3 +8,5 @@ To perform the analysis on the provided data sets, use the *visual_drift_analysi
 Before running the script, change the pathway in *scripts_path* and *data_path* variables to the pathway of the corresponding *scripts* and *data* directories on your computer.
 
 ## References
+Deitch et al., Representational drift in the mouse visual cortex, Current Biology (2021), https://doi.org/10.1016/
+j.cub.2021.07.062
