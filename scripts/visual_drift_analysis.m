@@ -983,7 +983,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),df(:),chi(:),pval(:),corrected_pv
 % display statistics summary table
 clc;
 disp(['PV correlation as a function of elapsed time'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 2F - Activity rates of three PM units across movie repeats within a block
@@ -1162,7 +1162,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),df(:),chi(:),pval(:),corrected_pv
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation as a function of elapsed time'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 2I - Tuning curve correlation as function of elapsed time across mice
@@ -1251,12 +1251,12 @@ statistics = table(cell2mat(brain_areas(1:6)'),df(:),chi(:),pval(:),corrected_pv
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation as a function of elapsed time'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 3A - Between blocks stability - PV correlation for area LM across mice
 % Calculating PV correlation between the 1st (repeats 1-2) and 2nd (repeats 3-5)
-% halves of two different blocks of ‘Natural movie 3’ in a single visual area (area LM).
+% halves of two different blocks of Â‘Natural movie 3Â’ in a single visual area (area LM).
 
 nat_movie = 2; % natural movie 3
 area = 2; % area LM
@@ -1402,7 +1402,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['PV correlation within blocks compared to between blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 3C - Ensemble rate correlation within and between blocks of natural movie 3
@@ -1488,7 +1488,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation within blocks compared to between blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 3D - Tuning curve correlation within and between blocks of natural movie 3
@@ -1583,7 +1583,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation within blocks compared to between blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 3E - PV correlation across sessions for a single V1 mouse
@@ -1745,7 +1745,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['PV correlation within sessions compared to between sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -1844,7 +1844,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation within sessions compared to between sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -1944,7 +1944,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation within sessions compared to between sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -2040,7 +2040,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['PV correlation between proximal sessions compared to distal sessions'])
-disp(['One-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['One-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -2685,7 +2685,7 @@ statistics = table(cell2mat(layer_list'),pvalues(:),corrected_pvalues(:),'Variab
 % display statistics summary table
 clc;
 disp(['PV correlation between proximal sessions compared to distal sessions'])
-disp(['One-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['One-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 4D - SST cells visual fields across movie repeats
@@ -3029,7 +3029,7 @@ statistics = table(cell2mat(brain_areas([1,2,4])'),df(2,:)',chi(2,:)',pvalues(2,
 % display statistics summary table
 clc;
 disp(['PV correlation as a function of elapsed time for inhibitory Cre lines'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 4H - Excitatory VS inhibitory - PV corr across blocks
@@ -3144,7 +3144,7 @@ statistics = table(cell2mat(brain_areas([1,2,4])'),zvalues(2,:)',pvalues(2,:)',c
 % display statistics summary table
 clc;
 disp(['PV correlation within blocks compared to between blocks for inhibitory Cre lines'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 4I - Excitatory VS inhibitory - PV corr across sessions
@@ -3273,7 +3273,7 @@ statistics = table(cell2mat(brain_areas([1,2,4])'),zvalues(2,:)',pvalues(2,:)',c
 % display statistics summary table
 clc;
 disp(['PV correlation  of proximal sessions compared to distal sessions for inhibitory Cre lines'])
-disp(['One-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['One-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure 5A - Visual hierarchy - ensemble rate correlation between movie repeats - Neuropixels
@@ -6460,7 +6460,7 @@ statistics = table(cell2mat(areas_names'),df(2,:)',chi(2,:)',pvalues(2,:)',corre
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation as a function of elapsed time for subsampled data (repeats 9-30)'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S2F - Tuning curve correlation on subset of movie repeats (repeats 9-30)
@@ -6496,8 +6496,8 @@ for area = 1:8 % loop over brain areas
             tuning_corr = [];  % define an empty variable for average tuning curve across movie repeats
             for repeat1 = 1:length(current_span) % loop over movie repeats
                 for repeat2 = 1:length(current_span) % loop over movie repeats
-                    tuning_corr(repeat1,repeat2,1) = median(diag(corr(current_mouse_blockA(:,:,repeat1)',current_mouse_blockA(:,:,repeat2)')),'omitnan'); % calculate tuning curve corr batween movie repeats of block A and calculate the median across corresponding units
-                    tuning_corr(repeat1,repeat2,2) = median(diag(corr(current_mouse_blockB(:,:,repeat1)',current_mouse_blockB(:,:,repeat2)')),'omitnan'); % calculate tuning curve corr batween movie repeats of block B and calculate the median across corresponding units
+                    tuning_corr(repeat1,repeat2,1) = median(diag(corr(current_mouse_blockA(:,:,current_span(repeat1))',current_mouse_blockA(:,:,current_span(repeat2))')),'omitnan'); % calculate tuning curve corr batween movie repeats of block A and calculate the median across corresponding units
+                    tuning_corr(repeat1,repeat2,2) = median(diag(corr(current_mouse_blockB(:,:,current_span(repeat1))',current_mouse_blockB(:,:,current_span(repeat2))')),'omitnan'); % calculate tuning curve corr batween movie repeats of block B and calculate the median across corresponding units
                 end
             end
             mean_tuning_corr = mean(tuning_corr,3,'omitnan'); % average across blocks
@@ -6576,7 +6576,7 @@ statistics = table(cell2mat(areas_names'),df(2,:)',chi(2,:)',pvalues(2,:)',corre
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation as a function of elapsed time for subsampled data (repeats 9-30)'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -6725,7 +6725,7 @@ statistics = table(cell2mat(areas_names'),df(2,:)',chi(2,:)',pvalues(2,:)',corre
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation as a function of elapsed time for non-suppressed units'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S2H - Tuning curve correlation on subset of non-adapted units
@@ -6879,7 +6879,7 @@ statistics = table(cell2mat(areas_names'),df(2,:)',chi(2,:)',pvalues(2,:)',corre
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation as a function of elapsed time for non-suppressed units'])
-disp(['Friedman’s tests with Holm–Bonferroni correction:'])
+disp(['FriedmanÂ’s tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S2I - Activity rate difference index for individual cells
@@ -7428,7 +7428,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation within blocks compared to between blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S3C - Tuning curve correlation within and between blocks of natural movie 3 (calcium imaging)
@@ -7506,7 +7506,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:),pvalue(:),corrected_pva
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation within blocks compared to between blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S3D - Ensmble rate and tuning curve correlation difference between blocks (calcium imaging)
@@ -7606,7 +7606,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:,1),pvalue(:,1),corrected
 % display statistics summary table
 clc;
 disp(['Ensemble rate and tuning curve correlation within blocks compared to between blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S3E - Average ensemble rate correlation across V1 animals in the Brain Observatory group
@@ -8414,7 +8414,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:),pvalues(:),corrected_p
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation between proximal blocks compared to between distal blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S4E - Drifting gratings - Tuning curve correlation across blocks (calcium imaging)
@@ -8483,7 +8483,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:),pvalues(:),corrected_p
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation between proximal blocks compared to between distal blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -8552,7 +8552,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:),pvalues(:),corrected_p
 % display statistics summary table
 clc;
 disp(['Ensemble rate correlation between proximal blocks compared to between distal blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S4G - Drifting gratings - Tuning curve correlation across blocks (neuropixels)
@@ -8620,7 +8620,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:),pvalues(:),corrected_p
 % display statistics summary table
 clc;
 disp(['Tuning curve correlation between proximal blocks compared to between distal blocks'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5A - Ensemble rate and tuning curve correlation difference between proximal and distal sessions
@@ -8733,7 +8733,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue(:,1),pvalue(:,1),corrected
 % display statistics summary table
 clc;
 disp(['Ensemble rate and tuning curve correlation within blocks compared to between blocks'])
-disp(['One-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['One-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5B - PV correlation across sessions with cells turnover
@@ -8852,7 +8852,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(2,:)',pvalues(2,:)',corre
 % display statistics summary table
 clc;
 disp(['PV correlation  of proximal sessions compared to distal sessions when including only cells active in atleast one of the compred time points'])
-disp(['One-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['One-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -8990,7 +8990,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues',pvalues',corrected_pvalu
 clc;
 disp(['Difference in the ensemble rate correlation values between proximal'])
 disp(['and distal sessions during blocks of spontaneous activity'])
-disp(['One-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['One-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -9072,7 +9072,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:,1),pvalues(:,1),zvalues
 % display statistics summary table
 clc;
 disp(['Difference in activity rates across sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5E - Number of active cells across sessions
@@ -9148,7 +9148,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:,1),pvalues(:,1),zvalues
 % display statistics summary table
 clc;
 disp(['Difference in number of active cells across sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -9207,7 +9207,7 @@ statistics = table({'pvalue';'zvalue'},stats(:,1),stats(:,2),stats(:,3),'Variabl
 % display statistics summary table
 clc;
 disp(['Difference in mean running speed across sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5G - Mean pupil size across sessions
@@ -9264,7 +9264,7 @@ statistics = table({'pvalue';'zvalue'},stats(:,1),stats(:,2),stats(:,3),'Variabl
 % display statistics summary table
 clc;
 disp(['Difference in mean pupil size across sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5H - Within day decoder across sessions
@@ -9351,7 +9351,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:,1),pvalues(:,1),zvalues
 % display statistics summary table
 clc;
 disp(['Difference in within day decoder performance across sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5I - With day PV correlation across sessions
@@ -9427,7 +9427,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalues(:,1),pvalues(:,1),zvalues
 % display statistics summary table
 clc;
 disp(['Difference in within day PV correlation across sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 %% Figure S5J - PV correlation difference between pairs of subsequent sessions
@@ -9497,7 +9497,7 @@ statistics = table(cell2mat(brain_areas(1:6)'),zvalue',pvalue','VariableNames',V
 % display statistics summary table
 clc;
 disp(['Difference in the PV correlation values between pairs of subsequent sessions'])
-disp(['Two-tailed Wilcoxon signed-rank tests with Holm–Bonferroni correction:'])
+disp(['Two-tailed Wilcoxon signed-rank tests with HolmÂ–Bonferroni correction:'])
 disp(statistics)
 
 
@@ -10746,7 +10746,7 @@ ylabel('Correlation (normalized)')
 legend(plt,brain_areas(1:6),'Location','best')
 legend('boxoff')
 
-%% Figure S7I - Internal structure stability VS PV stability when shuffling cells’ identities
+%% Figure S7I - Internal structure stability VS PV stability when shuffling cellsÂ’ identities
 
 subset_population_vectors = {}; % define an empty variable that will store all mice recorded from each visual area
 for area = 1:6 % loop over areas
